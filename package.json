@@ -8,6 +8,7 @@
 	"author": "spicato inc.",
 	"license": "MIT",
 	"publishConfig": {
-		"@spicato_kanayama:registry": "https://npm.pkg.github.com"
-	}
+		"access": "restricted",
+		"registry": "https://npm.pkg.github.com/"
+	  }
   }

@@ -1,3 +1,5 @@
+name: Release Package
+
 on:
   push:
     branches:
@@ -19,12 +21,9 @@ jobs:
           registry-url: https://npm.pkg.github.com/
 
       - name: install
-        run: yarn install
-
-      - name: build
-        run: yarn build
+        run: npm install
 
       - name: publish
-        run: yarn publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}

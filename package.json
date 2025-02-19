@@ -1,5 +1,5 @@
 {
-  "name": "@spicato/gyuto",
+  "name": "@spicato-inc/gyuto",
   "version": "0.0.2",
   "description": "画像圧縮ツール",
   "bin": {

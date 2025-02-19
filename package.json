@@ -2,13 +2,16 @@
   "name": "@spicato-inc/gyuto",
   "version": "0.0.3",
   "description": "画像圧縮ツール",
-  "bin": {
-    "gyuto": "./bin/gyuto.js"
+  "scripts": {
+    "all": "node main.js"
   },
   "author": "spicato inc.",
   "license": "MIT",
   "publishConfig": {
     "access": "restricted",
     "registry": "https://npm.pkg.github.com/"
+  },
+  "devDependencies": {
+    "onchange": "^7.1.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@spicato-inc/gyuto",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "画像圧縮ツール",
   "bin": {
     "gyuto": "./bin/gyuto.js"

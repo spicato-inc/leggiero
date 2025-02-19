@@ -6,5 +6,8 @@
 		"gyuto": "./bin/gyuto.js"
 	},
 	"author": "spicato inc.",
-	"license": "MIT"
+	"license": "MIT",
+	"publishConfig": {
+		"@spicato_kanayama:registry": "https://npm.pkg.github.com"
+	}
   }

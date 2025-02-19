@@ -25,9 +25,6 @@ const fileFormat = getExtension(fileName);
   if (!fs.existsSync(outPutDir)) {
     fs.mkdirSync(outPutDir, { recursive: true });
   }
-  if (!fs.existsSync(path.join(destRoot, "assets/images"))) {
-    fs.mkdirSync(path.join(destRoot, "assets/images"), { recursive: true });
-  }
 
   if (fileFormat === "svg") {
     fs.copyFile(changedFile, path.join(outPutDir, fileName), (err) => {

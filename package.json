@@ -1,6 +1,6 @@
 {
   "name": "@spicato-inc/syuku",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "画像圧縮ツール",
   "bin": {
     "syuku": "./bin/syuku.js"

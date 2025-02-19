@@ -1,98 +1,88 @@
-import fs from 'fs';
-import path from 'path';
-import sharp from 'sharp';
+import fs from "fs";
+import path from "path";
+import sharp from "sharp";
 
-let dirName = path.dirname(process.argv[2]);
-let fileName = path.basename(process.argv[2]);
-
-let outPutDir = `public${dirName.replace('src', '')}`;
+const changedFile = process.argv[2];
+const destRoot = process.argv[3] || "public";
+const fileName = path.basename(changedFile);
+const originalDir = path.dirname(changedFile);
+// 出力先は、元々のファイルパス中の "src" 部分を destRoot に置換
+let outPutDir = originalDir.replace("src", destRoot);
 
 // 拡張子を取得
 function getExtension(file) {
-	let ext = path.extname(file || '').split('.');
-	return ext[ext.length - 1];
+  let ext = path.extname(file || "").split(".");
+  return ext[ext.length - 1];
 }
 const fileFormat = getExtension(fileName);
 
 (() => {
-	// もしディレクトリがなければ作成
-	if (!fs.existsSync('public/assets/images')) {
-		fs.mkdirSync('public/assets/images');
-	}
-	// サブディレクトリがなければ作成
-	if (!fs.existsSync(outPutDir)) {
-		fs.mkdirSync(outPutDir);
-	}
+  // 必要なディレクトリがなければ作成
+  if (!fs.existsSync(outPutDir)) {
+    fs.mkdirSync(outPutDir, { recursive: true });
+  }
+  if (!fs.existsSync(path.join(destRoot, "assets/images"))) {
+    fs.mkdirSync(path.join(destRoot, "assets/images"), { recursive: true });
+  }
 
-	let sh = sharp(`${dirName}/${fileName}`);
-	let webp = sharp(`${dirName}/${fileName}`);
+  if (fileFormat === "svg") {
+    fs.copyFile(changedFile, path.join(outPutDir, fileName), (err) => {
+      if (err) {
+        fs.unlinkSync(path.join(outPutDir, fileName));
+        console.log(`\u001b[1;33m ${fileName}を${outPutDir}から削除しました。`);
+        return;
+      }
+      console.log(`\u001b[1;32m ${fileName}を${outPutDir}に複製しました。`);
+    });
+    return;
+  }
 
-	if (fileFormat === 'jpg' || fileFormat === 'jpeg') {
-		sh = sh.jpeg({ quality: 70 });
-		webp = webp.webp({ quality: 70 });
-	} else if (fileFormat === 'png') {
-		sh = sh.png({ quality: 70 });
-		webp = webp.webp({ quality: 70 });
-	} else if (fileFormat === 'gif') {
-		sh = sh.gif({ quality: 70 });
-		webp = webp.webp({ quality: 70 });
-	} else if (fileFormat === 'svg') {
-		// svgは複製のみ
-		fs.copyFile(process.argv[2], `${outPutDir}/${fileName}`, (err) => {
-			if (err) {
-				fs.unlinkSync(`${outPutDir}/${fileName}`);
-				console.log(
-					`\u001b[1;33m ${fileName}を${outPutDir}から削除しました。`
-				);
-				return;
-			}
-			console.log(
-				`\u001b[1;32m ${fileName}を${outPutDir}に複製しました。`
-			);
-		});
-		return;
-	} else {
-		console.log('\u001b[1;31m 対応していないファイル形式です。');
-		return;
-	}
+  let sh = sharp(changedFile);
+  let webp = sharp(changedFile);
 
-	sh.toFile(`${outPutDir}/${fileName}`, (err, info) => {
-		if (err) {
-			// 該当ファイルがない場合はdistから削除
-			if (fs.existsSync(`${outPutDir}/${fileName}`)) {
-				fs.unlinkSync(`${outPutDir}/${fileName}`);
-				fs.unlinkSync(
-					`${outPutDir}/webp/${fileName.replace(
-						/\.[^/.]+$/,
-						'.webp'
-					)}`
-				);
-				console.log(
-					`\u001b[1;33m ${fileName}を${outPutDir}から削除しました。`
-				);
-			}
-			return;
-		}
-		console.log(
-			`\u001b[1;32m ${fileName}を圧縮しました。 ${info.size / 1000}KB`
-		);
+  if (fileFormat === "jpg" || fileFormat === "jpeg") {
+    sh = sh.jpeg({ quality: 70 });
+    webp = webp.webp({ quality: 70 });
+  } else if (fileFormat === "png") {
+    sh = sh.png({ quality: 70 });
+    webp = webp.webp({ quality: 70 });
+  } else if (fileFormat === "gif") {
+    sh = sh.gif({ quality: 70 });
+    webp = webp.webp({ quality: 70 });
+  } else {
+    console.log("\u001b[1;31m 対応していないファイル形式です。");
+    return;
+  }
 
-		// ファイル名に『no-webp』が含む場合は webp を生成しない。
-		if (!fileName.includes('no-webp')) {
-			// webp生成、もしディレクトリがなければ作成
-			if (!fs.existsSync(`${outPutDir}/webp`)) {
-				fs.mkdirSync(`${outPutDir}/webp`);
-			}
-			webp.toFile(
-				`${outPutDir}/webp/${fileName.replace(/\.[^/.]+$/, '.webp')}`,
-				(err, info) => {
-					console.log(
-						`\u001b[1;32m ${fileName}をwebpに変換しました。 ${
-							info.size / 1000
-						}KB`
-					);
-				}
-			);
-		}
-	});
+  sh.toFile(path.join(outPutDir, fileName), (err, info) => {
+    if (err) {
+      if (fs.existsSync(path.join(outPutDir, fileName))) {
+        fs.unlinkSync(path.join(outPutDir, fileName));
+        fs.unlinkSync(
+          path.join(outPutDir, "webp", fileName.replace(/\.[^/.]+$/, ".webp"))
+        );
+        console.log(`\u001b[1;33m ${fileName}を${outPutDir}から削除しました。`);
+      }
+      return;
+    }
+    console.log(
+      `\u001b[1;32m ${fileName}を圧縮しました。 ${info.size / 1000}KB`
+    );
+
+    if (!fileName.includes("no-webp")) {
+      if (!fs.existsSync(path.join(outPutDir, "webp"))) {
+        fs.mkdirSync(path.join(outPutDir, "webp"), { recursive: true });
+      }
+      webp.toFile(
+        path.join(outPutDir, "webp", fileName.replace(/\.[^/.]+$/, ".webp")),
+        (err, info) => {
+          console.log(
+            `\u001b[1;32m ${fileName}をwebpに変換しました。 ${
+              info.size / 1000
+            }KB`
+          );
+        }
+      );
+    }
+  });
 })();

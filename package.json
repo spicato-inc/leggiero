@@ -1,9 +1,9 @@
 {
   "name": "@spicato-inc/gyuto",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "画像圧縮ツール",
   "scripts": {
-    "all": "node main.js"
+    "all": "node ./main.js"
   },
   "author": "spicato inc.",
   "license": "MIT",

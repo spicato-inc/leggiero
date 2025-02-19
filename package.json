@@ -1,0 +1,10 @@
+{
+	"name": "@spicato/gyuto",
+	"version": "0.0.1",
+	"description": "画像圧縮ツール",
+	"bin": {
+		"gyuto": "./bin/gyuto.js"
+	},
+	"author": "spicato inc.",
+	"license": "MIT"
+  }

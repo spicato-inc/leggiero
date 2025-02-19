@@ -3,11 +3,15 @@ import path from "path";
 import sharp from "sharp";
 
 const changedFile = process.argv[2];
-const destRoot = process.argv[3] || "public";
+const sourceBase = process.argv[3];
+const destRoot = process.argv[4] || "public";
+
 const fileName = path.basename(changedFile);
-const originalDir = path.dirname(changedFile);
-// 出力先は、元々のファイルパス中の "src" 部分を destRoot に置換
-let outPutDir = originalDir.replace("src", destRoot);
+const relativeDir = path.relative(
+  path.resolve(sourceBase),
+  path.dirname(changedFile)
+);
+let outPutDir = path.join(destRoot, relativeDir);
 
 // 拡張子を取得
 function getExtension(file) {

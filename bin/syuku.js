@@ -23,13 +23,15 @@ Press Ctrl+C to stop.`
     );
 
     spawn(
-      "onchange",
+      "npx",
       [
+        "onchange",
         target,
         "--",
         "node",
         `${__dirname}/../sharp/sharp-watch.mjs`,
         "{{changed}}",
+        target,
         dest,
       ],
       { stdio: "inherit", shell: true }

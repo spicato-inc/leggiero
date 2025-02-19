@@ -1,3 +1,3 @@
-# Gyuto
+# Syuku 『縮』
 
-## Sharp製の画像圧縮ツール
+## sharp 製の画像圧縮ツール

@@ -1,9 +1,9 @@
 {
-  "name": "@spicato-inc/gyuto",
-  "version": "1.0.0",
+  "name": "@spicato-inc/syuku",
+  "version": "1.1.0",
   "description": "画像圧縮ツール",
   "bin": {
-    "gyuto": "./bin/gyuto.js"
+    "syuku": "./bin/syuku.js"
   },
   "author": "spicato inc.",
   "license": "MIT",

@@ -16,6 +16,12 @@ switch (command) {
     });
     break;
   case "watch":
+    console.log(
+      "\x1b[32m%s\x1b[0m",
+      `Watching ${target}...
+Press Ctrl+C to stop.`
+    );
+
     spawn(
       "onchange",
       [
@@ -23,10 +29,10 @@ switch (command) {
         "--",
         "node",
         `${__dirname}/../sharp/sharp-watch.mjs`,
-        "{changed}",
+        "{{changed}}",
         dest,
       ],
-      { stdio: "inherit" }
+      { stdio: "inherit", shell: true }
     );
     break;
   default:

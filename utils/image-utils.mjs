@@ -5,12 +5,15 @@ import { getExtension, ensureDirectoryExists } from "./file-utils.mjs";
 
 /**
  * サポートされている画像フォーマットかどうかチェック
- * @param {string} filename ファイル名
+ * @param {string} filename ファイル名またはパス
  * @returns {boolean} サポート対象のフォーマットかどうか
  */
 export function isSupportedImageFormat(filename) {
+  // パスからファイル名を取得し、拡張子を確認
   const ext = getExtension(filename);
-  return ['jpg', 'jpeg', 'png', 'gif', 'svg'].includes(ext);
+  // 拡張子がない場合やサポート対象外の場合はfalse
+  if (!ext) return false;
+  return ['jpg', 'jpeg', 'png', 'gif', 'svg'].includes(ext.toLowerCase());
 }
 
 /**

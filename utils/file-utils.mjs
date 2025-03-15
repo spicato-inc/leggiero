@@ -8,7 +8,9 @@ import path from "path";
  */
 export function getExtension(file) {
   if (!file) return "";
-  const ext = path.extname(file).toLowerCase();
+  // ファイル名だけを取得して拡張子を抽出
+  const fileName = path.basename(file);
+  const ext = path.extname(fileName).toLowerCase();
   return ext ? ext.substring(1) : "";
 }
 

@@ -7,7 +7,8 @@ import path from "path";
  * @returns {string} 拡張子 (ドットなし)
  */
 export function getExtension(file) {
-  const ext = path.extname(file || "").toLowerCase();
+  if (!file) return "";
+  const ext = path.extname(file).toLowerCase();
   return ext ? ext.substring(1) : "";
 }
 
@@ -16,8 +17,16 @@ export function getExtension(file) {
  * @param {string} dirPath 作成するディレクトリパス
  */
 export function ensureDirectoryExists(dirPath) {
-  if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { recursive: true });
+  if (!dirPath) {
+    throw new Error('ディレクトリパスが指定されていません');
+  }
+
+  try {
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+  } catch (error) {
+    throw new Error(`ディレクトリ作成エラー (${dirPath}): ${error.message}`);
   }
 }
 
@@ -27,6 +36,18 @@ export function ensureDirectoryExists(dirPath) {
  * @param {function} callback 完了時のコールバック関数 (ファイル一覧を引数に取る)
  */
 export function readDirRecursive(folderPath, callback) {
+  if (!folderPath) {
+    console.error('\u001b[1;31m 有効なフォルダパスが指定されていません');
+    if (callback) callback([]);
+    return;
+  }
+
+  if (!fs.existsSync(folderPath)) {
+    console.error(`\u001b[1;31m 指定されたディレクトリが存在しません: ${folderPath}`);
+    if (callback) callback([]);
+    return;
+  }
+
   const result = [];
   let execCounter = 0;
 
@@ -34,7 +55,7 @@ export function readDirRecursive(folderPath, callback) {
     execCounter++;
     fs.readdir(dirPath, (err, items) => {
       if (err) {
-        console.error('\u001b[1;31m ディレクトリの読み込みエラー:', err);
+        console.error(`\u001b[1;31m ディレクトリの読み込みエラー (${dirPath}): ${err.message}`);
         execCounter--;
         if (execCounter === 0 && callback) callback(result);
         return;
@@ -50,7 +71,7 @@ export function readDirRecursive(folderPath, callback) {
             processDir(fullPath);
           }
         } catch (statErr) {
-          console.error('\u001b[1;31m ファイル情報取得エラー:', statErr);
+          console.error(`\u001b[1;31m ファイル情報取得エラー (${fullPath}): ${statErr.message}`);
         }
       });
 
@@ -61,5 +82,10 @@ export function readDirRecursive(folderPath, callback) {
     });
   };
 
-  processDir(folderPath);
+  try {
+    processDir(folderPath);
+  } catch (error) {
+    console.error(`\u001b[1;31m ディレクトリ走査中にエラーが発生しました: ${error.message}`);
+    if (callback) callback(result);
+  }
 }

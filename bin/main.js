@@ -94,7 +94,7 @@ else if (command === 'watch') {
 }
 else {
   console.log(`
-\u001b[1;36m レジエロ - 画像圧縮ツール \u001b[0m
+\u001b[1;36m leggiero（レジェロ） - 画像圧縮ツール \u001b[0m
 
 使用方法:
   leggiero all <input-directory> [output-directory]

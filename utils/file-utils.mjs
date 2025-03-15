@@ -13,6 +13,18 @@ export function getExtension(file) {
 }
 
 /**
+ * システムファイルやサポート対象外のファイルかどうかを判断
+ * @param {string} filename ファイル名
+ * @returns {boolean} システムファイルまたはサポート対象外の場合はtrue
+ */
+export function isIgnoredFile(filename) {
+  const basename = path.basename(filename);
+  // ドットで始まるファイル (.DS_Store, .gitkeep など) や
+  // サムネイルファイル (Thumbs.db) などをスキップ
+  return basename.startsWith('.') || basename === 'Thumbs.db';
+}
+
+/**
  * ディレクトリを再帰的に作成
  * @param {string} dirPath 作成するディレクトリパス
  */
@@ -66,7 +78,10 @@ export function readDirRecursive(folderPath, callback) {
         try {
           const stats = fs.statSync(fullPath);
           if (stats.isFile()) {
-            result.push(fullPath);
+            // システムファイルやサポート対象外のファイルはスキップ
+            if (!isIgnoredFile(item)) {
+              result.push(fullPath);
+            }
           } else if (stats.isDirectory()) {
             processDir(fullPath);
           }

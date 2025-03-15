@@ -33,6 +33,12 @@ export function processImage(inputFile, outputPath, config, generateWebp = true)
       return Promise.reject(new Error(`入力ファイルが見つかりません: ${inputFile}`));
     }
 
+    // サポート対象外の形式の場合は警告メッセージだけ表示して続行
+    if (!isSupportedImageFormat(fileName)) {
+      console.log(`\u001b[1;33m スキップ: 未対応の形式です: ${fileName}`);
+      return Promise.resolve();
+    }
+
     // SVGはコピーのみ
     if (fileFormat === 'svg') {
       return new Promise((resolve, reject) => {
@@ -97,7 +103,9 @@ function compressImage(inputFile, outputPath, fileName, fileFormat, config, gene
           if (webpProcessor) webpProcessor = webpProcessor.webp({ quality: config.quality.webp });
           break;
         default:
-          reject(new Error(`未対応の形式です: ${fileFormat}`));
+          // 未対応形式の場合はエラーを投げずに警告を表示して処理を続行
+          console.log(`\u001b[1;33m 未対応の形式です: ${fileFormat} (${fileName})`);
+          resolve();
           return;
       }
 

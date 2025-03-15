@@ -5,7 +5,7 @@ const target = process.argv[3];
 const dest = process.argv[4];
 
 if (!command || !target) {
-  console.log("Usage: gyuto [all|watch] <source-directory> [dest-directory]");
+  console.log("Usage: leggiero [all|watch] <source-directory> [dest-directory]");
   process.exit(1);
 }
 
@@ -38,6 +38,6 @@ Press Ctrl+C to stop.`
     );
     break;
   default:
-    console.log("Usage: gyuto [all|watch] <source-directory> [dest-directory]");
+    console.log("Usage: leggiero [all|watch] <source-directory> [dest-directory]");
     break;
 }

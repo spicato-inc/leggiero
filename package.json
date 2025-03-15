@@ -1,9 +1,9 @@
 {
-  "name": "@spicato-inc/syuku",
-  "version": "1.2.1",
+  "name": "@spicato-inc/leggiero",
+  "version": "0.0.1",
   "description": "画像圧縮ツール",
   "bin": {
-    "syuku": "./bin/syuku.js"
+    "leggiero": "./bin/main.js"
   },
   "author": "spicato inc.",
   "license": "MIT",

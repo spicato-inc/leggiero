@@ -1,6 +1,9 @@
-# Syuku 『縮』
+# leggiero
 
-**Syuku 『縮』** は Node.js 用の画像圧縮ツールです。
+**leggiero** は Node.js 用の画像圧縮ツールです。
+
+名前は音楽用語で『軽い、軽やかで優美に』という意味で、画像ファイルを軽くするという意味を込めています。
+
 `sharp` を利用して JPEG, PNG, GIF などの画像を圧縮し、出力先ディレクトリに同じディレクトリ構造で保存します。また、WEBP 形式への変換も対応しています（ただし、ファイル名に「no-webp」が含まれている場合は変換をスキップします）。
 SVG は複製のみ行います。
 
@@ -21,7 +24,7 @@ SVG は複製のみ行います。
 グローバルインストール例:
 
 ```bash
-npm install -g @spicato-inc/syuku
+npm install -g @spicato-inc/leggiero
 ```
 
 ## 使い方
@@ -34,13 +37,13 @@ npm install -g @spicato-inc/syuku
 出力先を指定しない場合は `public` が使用されます。
 
 ```bash
-syuku all <source-directory> [dest-directory]
+leggiero all <source-directory> [dest-directory]
 ```
 
 例:
 
 ```bash
-syuku all src/assets/images public
+leggiero all src/assets/images public
 ```
 
 ### 監視 (watch モード)
@@ -49,14 +52,32 @@ syuku all src/assets/images public
 出力先を指定しない場合は `public` が使用されます。
 
 ```bash
-syuku watch <source-directory> [dest-directory]
+leggiero watch <source-directory> [dest-directory]
 ```
 
 例:
 
 ```bash
-syuku watch src/assets/images public
+leggiero watch src/assets/images public
 ```
+
+### 設定ファイル
+
+プロジェクトのルートディレクトリに `.leggierorc` ファイルを作成することで、画像圧縮の品質設定をカスタマイズできます。
+
+```json
+{
+  "quality": {
+    "jpg": 70,
+    "png": 70,
+    "gif": 70,
+    "webp": 70
+  }
+}
+```
+
+設定ファイルが存在しない場合は、デフォルト値（上記の値）が使用されます。
+数値が大きいほど高品質・低圧縮となります（0-100の範囲）。
 
 ## 動作の流れ
 

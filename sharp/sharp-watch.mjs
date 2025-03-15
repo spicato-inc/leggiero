@@ -6,6 +6,37 @@ const changedFile = process.argv[2];
 const sourceBase = process.argv[3];
 const destRoot = process.argv[4] || "public";
 
+// 設定ファイルを読み込む
+function loadConfig() {
+  const configPath = path.resolve('.leggierorc');
+  const defaultConfig = {
+    quality: {
+      jpg: 70,
+      png: 70,
+      gif: 70,
+      webp: 70
+    }
+  };
+
+  try {
+    if (fs.existsSync(configPath)) {
+      const configContent = fs.readFileSync(configPath, 'utf8');
+      const config = JSON.parse(configContent);
+      return {
+        quality: {
+          ...defaultConfig.quality,
+          ...config.quality
+        }
+      };
+    }
+  } catch (error) {
+    console.log('\u001b[1;33m 設定ファイルの読み込みに失敗しました。デフォルト設定を使用します。');
+  }
+  return defaultConfig;
+}
+
+const config = loadConfig();
+
 const fileName = path.basename(changedFile);
 const relativeDir = path.relative(
   path.resolve(sourceBase),
@@ -42,14 +73,14 @@ const fileFormat = getExtension(fileName);
   let webp = sharp(changedFile);
 
   if (fileFormat === "jpg" || fileFormat === "jpeg") {
-    sh = sh.jpeg({ quality: 70 });
-    webp = webp.webp({ quality: 70 });
+    sh = sh.jpeg({ quality: config.quality.jpg });
+    webp = webp.webp({ quality: config.quality.webp });
   } else if (fileFormat === "png") {
-    sh = sh.png({ quality: 70 });
-    webp = webp.webp({ quality: 70 });
+    sh = sh.png({ quality: config.quality.png });
+    webp = webp.webp({ quality: config.quality.webp });
   } else if (fileFormat === "gif") {
-    sh = sh.gif({ quality: 70 });
-    webp = webp.webp({ quality: 70 });
+    sh = sh.gif({ quality: config.quality.gif });
+    webp = webp.webp({ quality: config.quality.webp });
   } else {
     console.log("\u001b[1;31m 対応していないファイル形式です。");
     return;

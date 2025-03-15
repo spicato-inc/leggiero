@@ -5,6 +5,6 @@
     "gif": 70,
     "webp": 70
   },
-  "input": "src/images",
-  "output": "public"
+  "input": "src/img",
+  "output": "dist/assets/img"
 }

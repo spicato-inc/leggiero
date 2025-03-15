@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Leggiero Configuration",
+  "description": "画像圧縮設定用スキーマ",
+  "type": "object",
+  "properties": {
+    "quality": {
+      "type": "object",
+      "description": "各フォーマットの圧縮品質設定",
+      "properties": {
+        "jpg": {
+          "type": "integer",
+          "description": "JPEG圧縮品質 (0-100)",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "png": {
+          "type": "integer",
+          "description": "PNG圧縮品質 (0-100)",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "gif": {
+          "type": "integer",
+          "description": "GIF圧縮品質 (0-100)",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "webp": {
+          "type": "integer",
+          "description": "WebP圧縮品質 (0-100)",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "additionalProperties": false
+    },
+    "input": {
+      "type": "string",
+      "description": "ソース（監視対象）ディレクトリパス"
+    },
+    "output": {
+      "type": "string",
+      "description": "出力ディレクトリパス"
+    }
+  },
+  "additionalProperties": false
+}

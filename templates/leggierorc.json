@@ -4,5 +4,7 @@
     "png": 70,
     "gif": 70,
     "webp": 70
-  }
+  },
+  "input": "src/images",
+  "output": "public"
 }

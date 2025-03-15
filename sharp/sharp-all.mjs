@@ -1,40 +1,28 @@
 import fs from "fs";
 import path from "path";
 import sharp from "sharp";
+import { loadConfig } from "../utils/config-utils.mjs";
 
-let sourceDir = process.argv[2];
-let destRoot = process.argv[3] || "public";
+// コマンドライン引数から取得
+let cliSourceDir = process.argv[2];
+let cliDestRoot = process.argv[3];
 
-// 設定ファイルを読み込む
-function loadConfig() {
-  const configPath = path.resolve('.leggierorc');
-  const defaultConfig = {
-    quality: {
-      jpg: 70,
-      png: 70,
-      gif: 70,
-      webp: 70
-    }
-  };
+// 設定ファイルを読み込む (コマンドラインオプションを優先)
+const config = loadConfig({
+  input: cliSourceDir, // sourceをinputに変更
+  output: cliDestRoot
+});
 
-  try {
-    if (fs.existsSync(configPath)) {
-      const configContent = fs.readFileSync(configPath, 'utf8');
-      const config = JSON.parse(configContent);
-      return {
-        quality: {
-          ...defaultConfig.quality,
-          ...config.quality
-        }
-      };
-    }
-  } catch (error) {
-    console.log('\u001b[1;33m 設定ファイルの読み込みに失敗しました。デフォルト設定を使用します。');
-  }
-  return defaultConfig;
+// 最終的なソースと出力先
+const sourceDir = config.input; // sourceをinputに変更
+const destRoot = config.output;
+
+// ソースディレクトリが指定されていない場合はエラー
+if (!sourceDir) {
+  console.error('\u001b[1;31m ソースディレクトリが指定されていません。');
+  console.error('\u001b[1;31m コマンドライン引数で指定するか、.leggierorc ファイルで設定してください。');
+  process.exit(1);
 }
-
-const config = loadConfig();
 
 // 拡張子を確認
 function getExtension(file) {

@@ -1,6 +1,6 @@
 {
   "name": "@spicato-inc/leggiero",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "画像圧縮ツール",
   "bin": {
     "leggiero": "bin/main.js"

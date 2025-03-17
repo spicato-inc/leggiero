@@ -1,11 +1,12 @@
 # leggiero
 
-**leggiero** は Node.js 用の画像圧縮ツールです。
+**leggiero** は [sharp](https://sharp.pixelplumbing.com/) を用いた画像圧縮ツールです。
 
-名前は音楽用語で『軽い、軽やかで優美に』という意味で、画像ファイルを軽くするという意味を込めています。
+『leggiero』 とは、音楽用語で「軽やかで優美に」という意味を持ち、画像ファイルを軽くするという意図を込めています。
 
-`sharp` を利用して JPEG, PNG, GIF などの画像を圧縮し、出力先ディレクトリに同じディレクトリ構造で保存します。また、WEBP 形式への変換も対応しています（ただし、ファイル名に「no-webp」が含まれている場合は変換をスキップします）。
-SVG は複製のみ行います。
+このツールを使うと、JPEG、PNG、GIF などの画像を圧縮し、元のディレクトリ構造を保持したまま出力先に保存できます。また、WebP 形式への変換にも対応しています。（ただし、ファイル名に「no-webp」が含まれている場合は変換をスキップします。）
+
+なお、SVG ファイルについては、圧縮せずにそのままコピーします。
 
 ## 特徴
 
@@ -16,7 +17,7 @@ SVG は複製のみ行います。
 
 ## インストール
 
-このパッケージをインストールすると必要な依存パッケージ（sharp, onchange）は自動的にインストールされます。
+leggiero をインストールすると、必要な依存パッケージ（sharp, onchange）も自動的にインストールされます。
 
 ```bash
 # グローバルインストール
@@ -33,7 +34,7 @@ npm install --save-dev @spicato-inc/leggiero
 指定したディレクトリ内の全画像を圧縮します。
 
 ```bash
-leggiero all <input-directory> [output-directory]
+leggiero all <入力ディレクトリ> [出力ディレクトリ]
 ```
 
 例:
@@ -44,10 +45,10 @@ leggiero all src/assets/images dist/img
 
 ### 監視 (watch モード)
 
-指定したディレクトリの画像変更を監視して自動で処理します。
+指定したディレクトリを監視し、画像に変更があった場合に自動で処理を行います。
 
 ```bash
-leggiero watch <input-directory> [output-directory]
+leggiero watch <入力ディレクトリ> [出力ディレクトリ]
 ```
 
 例:

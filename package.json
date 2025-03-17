@@ -3,7 +3,7 @@
   "version": "1.0.4",
   "description": "画像圧縮ツール",
   "bin": {
-    "leggiero": "./bin/main.js"
+    "leggiero": "bin/main.js"
   },
   "author": "spicato inc.",
   "license": "MIT",

@@ -33,6 +33,10 @@ jobs:
     needs: check-version-change
     if: ${{ needs.check-version-change.outputs.is_version_changed == 'true' }}
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
     steps:
       - uses: actions/checkout@v4
 

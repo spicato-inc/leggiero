@@ -1,0 +1,50 @@
+name: Version Update
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'package.json'
+
+jobs:
+  check-version-change:
+    runs-on: ubuntu-latest
+    outputs:
+      is_version_changed: ${{ steps.check_version.outputs.changed }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Check if version changed
+        id: check_version
+        run: |
+          git diff HEAD^ HEAD -- package.json | grep '"version":' > /dev/null
+          if [ $? -eq 0 ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Version in package.json has changed!"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "Version in package.json has not changed"
+          fi
+
+  deploy:
+    needs: check-version-change
+    if: ${{ needs.check-version-change.outputs.is_version_changed == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com/
+
+      - name: install
+        run: npm install
+
+      - name: publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

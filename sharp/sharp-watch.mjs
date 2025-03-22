@@ -1,3 +1,4 @@
+import fs from "fs";
 import path from "path";
 import { loadConfig } from "../utils/config-utils.mjs";
 import { ensureDirectoryExists } from "../utils/file-utils.mjs";
@@ -11,7 +12,7 @@ const cliDestRoot = process.argv[4];
 // 設定ファイルを読み込む
 const config = loadConfig({
   input: cliSourceBase,
-  output: cliDestRoot
+  output: cliDestRoot,
 });
 
 // ソースと出力先の決定
@@ -20,8 +21,10 @@ const destRoot = config.output;
 
 // 入力ディレクトリチェック
 if (!sourceBase) {
-  console.error('\u001b[1;31m 監視対象ディレクトリが指定されていません。');
-  console.error('\u001b[1;31m コマンドライン引数で指定するか、.leggierorc ファイルの input プロパティで設定してください。');
+  console.error("\u001b[1;31m 監視対象ディレクトリが指定されていません。");
+  console.error(
+    "\u001b[1;31m コマンドライン引数で指定するか、.leggierorc ファイルの input プロパティで設定してください。"
+  );
   process.exit(1);
 }
 
@@ -47,9 +50,15 @@ if (!isSupportedImageFormat(fileName)) {
 
     // 画像処理
     await processImage(changedFile, outputDir, config, true);
-
   } catch (error) {
-    console.error('\u001b[1;31m 処理中にエラーが発生しました:', error);
-    process.exit(1);
+    // 該当ファイルがない場合はファイル削除
+    if (fs.existsSync(`${outputDir}/${fileName}`)) {
+      fs.unlinkSync(`${outputDir}/${fileName}`);
+      fs.unlinkSync(
+        `${outputDir}/webp/${fileName.replace(/\.[^/.]+$/, ".webp")}`
+      );
+      console.log(`\u001b[1;33m ${fileName}を${outputDir}から削除しました。`);
+    }
+    return;
   }
 })();

@@ -75,15 +75,7 @@ if (command === "all") {
 
   // onchangeコマンドを生成
   const watchPattern = path.join(inputDirectory, "**/*.{jpg,jpeg,png,gif,svg}");
-  const args = [
-    `"${watchPattern}"`,
-    "--",
-    "node",
-    watchScript,
-    "{file}",
-    inputDirectory,
-    outputDirectory,
-  ];
+  const args = [`"${watchPattern}"`, "--", "node", watchScript, "{{changed}}"];
 
   const onchangeProcess = spawn("onchange", args, {
     stdio: "inherit",
